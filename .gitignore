@@ -27,4 +27,4 @@ build/Release
 node_modules
 
 # Distribution folder (generate with grunt)
-dist/*
+dist
