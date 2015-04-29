@@ -1,10 +1,43 @@
 <html lang="en" ng-app="mahjong">
   <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/app.css"/>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
   </head>
-  <body>
+  <body ng-controller="GameController">
+    <div class="container">
+      <div class="row">
+        <div class="page-header">
+          <h1>Mahjong Madness <small>Insanity..</small></h1>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="panel panel-default">
+            <div class="panel-heading"><b>Active Games</b></div>
+            <div class="panel-body">
+              <div class="list-group" ng-repeat="game in games | orderBy: '-createdOn':true" ng-show="game.state == 'open'">
+                <a href="#" class="list-group-item">
+                  <h4 class="list-group-item-heading">Game number #{{$index+1}} {{game.layout}}</h4>
+                  <p class="list-group-item-text">
+                    <b>Min players:</b> {{game.minPlayers}}
+                    <br><b>Max players:</b> {{game.maxPlayers}}
+                    <br><br><b>Players in game</b>
+                    <br><span class="list-group player-list" ng-repeat="player in game.players">
+                      &raquo; {{player.nickname}}<br>
+                    </span>
+                    <br><button class="btn btn-warning" ng-click="joinGame('Hello there!')">Join game!</button>
+                  </p>
+                </a>
+              </div>
+              <button class="btn btn-success" ng-click="addGame()">Start new game!</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="js/app.js"></script>
   </body>
 </html>
