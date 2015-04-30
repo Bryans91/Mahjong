@@ -4,7 +4,7 @@ module.exports = function($scope, GameFactory){
   $scope.addGame = function() {
     GameFactory.addGame();
   }
-  $scope.joinGame = function(player) {
-    GameFactory.joinGame(player);
+  $scope.joinGame = function(game) {
+    GameFactory.joinGame(game);
   }
 }

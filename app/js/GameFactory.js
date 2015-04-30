@@ -103,8 +103,16 @@ module.exports = function(){
     )
   }
 
-  factory.joinGame = function(player){
-    console.log(player);
+  factory.joinGame = function(game){
+    game.players.push(
+      {
+        "id": "string", // Avans username
+        "name": "string", // fullname
+        "email": "string", // avans e-mail
+        "nickname": "Newbie" // maybe filled later?
+        // Properties like score and isWinner maybe filled later
+      }
+    )
   }
 
   return factory;
