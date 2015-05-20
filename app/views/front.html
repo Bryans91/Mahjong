@@ -1,0 +1,31 @@
+      <div class="row" ng-controller="GameController">
+        <div class="page-header">
+          <h1>Mahjong Madness <small>Insanity..</small></h1>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="panel panel-default">
+            <div class="panel-heading"><b>Active Games</b></div>
+            <div class="panel-body">
+              <div class="list-group" ng-repeat="game in games | orderBy: '-createdOn':true" ng-show="game.state == 'open'">
+                <a href="#" class="list-group-item">
+                  <h4 class="list-group-item-heading">Game number #{{$index+1}} {{game.layout}}</h4>
+                  <p class="list-group-item-text">
+                    <div><b>Min players:</b> {{game.minPlayers}}</div>
+                    <div><b>Max players:</b> {{game.maxPlayers}}</div>
+                    <div><b>Players in game:</b></div>
+                    <ul class="list-group">
+                      <li class="list-group-item player-list" ng-repeat="player in game.players">
+                        {{player.nickname}}
+                      </li>
+                    </ul>
+                    <button class="btn btn-warning" ng-click="joinGame(game)">Join game!</button>
+                  </p>
+                </a>
+              </div>
+              <button class="btn btn-success" ng-click="addGame()">Start new game!</button>
+            </div>
+          </div>
+        </div>
+      </div>
