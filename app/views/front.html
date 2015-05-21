@@ -6,26 +6,36 @@
       <div class="row">
         <div class="col-md-4">
           <div class="panel panel-default">
-            <div class="panel-heading"><b>Active Games</b></div>
+            <div class="panel-heading">
+              <b>Open Games</b>
+              <div class="pull-right">
+                <ng-pluralize count="results.length"
+                  when="{'0': 'no results',
+                  '1': '1 result',
+                  'other': '{} results'}">
+                </ng-pluralize>
+              </div>
+            </div>
             <div class="panel-body">
-              <div class="list-group" ng-repeat="game in games | orderBy: '-createdOn':true" ng-show="game.state == 'open'">
+              <div class="input-group">
+                <span class="input-group-addon" id="searchPrefix">Search</span>
+                <input type="text" class="form-control" ng-model="searchText" placeholder="Search.." aria-describedby="searchPrefix">
+              </div><br>
+              <div class="list-group" ng-repeat="game in games | orderBy: '-createdOn':true | filter:searchText as results" ng-show="game.state == 'open'">
                 <a href="#" class="list-group-item">
                   <h4 class="list-group-item-heading">Game number #{{$index+1}} {{game.layout}}</h4>
                   <p class="list-group-item-text">
-                    <div><b>Min players:</b> {{game.minPlayers}}</div>
-                    <div><b>Max players:</b> {{game.maxPlayers}}</div>
-                    <div><b>Players in game:</b></div>
-                    <ul class="list-group">
-                      <li class="list-group-item player-list" ng-repeat="player in game.players">
-                        {{player.nickname}}
-                      </li>
-                    </ul>
-                    <button class="btn btn-warning" ng-click="joinGame(game)">Join game!</button>
+                    <b>Min players:</b> {{game.minPlayers}}
+                    <br><b>Max players:</b> {{game.maxPlayers}}
+                    <br><br><b>Players in game</b>
+                    <br><span class="list-group player-list" ng-repeat="player in game.players">
+                      &raquo; {{player.nickname}}<br>
+                    </span>
+                    <br><button class="btn btn-warning" ng-click="joinGame(game)">Join game!</button>
                   </p>
                 </a>
               </div>
               <button class="btn btn-success" ng-click="addGame()">Start new game!</button>
             </div>
-          </div>
         </div>
       </div>
