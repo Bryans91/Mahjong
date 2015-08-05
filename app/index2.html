@@ -15,7 +15,7 @@
       </div>
       <div class="row" ng-init="getBoard('5541fc5b1872631100678bb4')">
         <div ng-repeat="tile in tiles">
-          <span class="tile {{tile.zPos === 0 ? 'tilelow' : 'tilehigh'}}" style="top:{{tile.yPos*25+100}};left:{{tile.xPos*25}};z-index:{{tile.zPos}};">{{tile.tile.name}}</span>
+          <span class="tile {{tile.zPos === 0 ? 'tilelow' : 'tilehigh'}}" style="top:{{tile.yPos*30+100}};left:{{tile.xPos*20}};z-index:{{tile.zPos}};">{{tile.tile.name}}</span>
         </div>
       </div>
     </div>

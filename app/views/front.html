@@ -1,13 +1,13 @@
-      <div class="row" ng-controller="GameController">
+      <div class="row" ng-init="getGames()">
         <div class="page-header">
           <h1>Mahjong Madness <small>Insanity..</small></h1>
         </div>
       </div>
       <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-3">
           <div class="panel panel-default">
             <div class="panel-heading">
-              <b>Open Games</b>
+              <b>All Games</b>
               <div class="pull-right">
                 <ng-pluralize count="results.length"
                   when="{'0': 'no results',
@@ -19,23 +19,122 @@
             <div class="panel-body">
               <div class="input-group">
                 <span class="input-group-addon" id="searchPrefix">Search</span>
-                <input type="text" class="form-control" ng-model="searchText" placeholder="Search.." aria-describedby="searchPrefix">
+                <input type="text" class="form-control" ng-model="searchTextAll" placeholder="Search.." aria-describedby="searchPrefix">
               </div><br>
-              <div class="list-group" ng-repeat="game in games | orderBy: '-createdOn':true | filter:searchText as results" ng-show="game.state == 'open'">
-                <a href="#" class="list-group-item">
-                  <h4 class="list-group-item-heading">Game number #{{$index+1}} {{game.layout}}</h4>
+              <div class="list-group" ng-repeat="game in pagedGames | orderBy: '-createdOn':true | filter:searchTextAll as results">
+                <span class="list-group-item">
+                  <h4 class="list-group-item-heading">{{game.gameTemplate._id}} #{{$index+1}} ({{game.state}})</h4>
                   <p class="list-group-item-text">
                     <b>Min players:</b> {{game.minPlayers}}
-                    <br><b>Max players:</b> {{game.maxPlayers}}
-                    <br><br><b>Players in game</b>
-                    <br><span class="list-group player-list" ng-repeat="player in game.players">
-                      &raquo; {{player.nickname}}<br>
-                    </span>
-                    <br><button class="btn btn-warning" ng-click="joinGame(game)">Join game!</button>
+                    <br><b>Max players:</b> {{game.maxPlayers}}<br>
+                    <br><b>Players in game</b>
+                    <table class="table table-striped table-hover table-condensed">
+                      <tbody>
+                        <tr ng-repeat="player in game.players">
+                          <td>{{player.name}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <button class="btn btn-warning btn-block" ng-click="joinGame(game)">Join game!</button>
                   </p>
-                </a>
+                </span>
               </div>
-              <button class="btn btn-success" ng-click="addGame()">Start new game!</button>
+              <button class="btn btn-info btn-block" ng-class="nextPageDisabledClass()" ng-click="loadMore()">Load More..</button>
+            </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <b>Open Games</b>
+          </div>
+          <div class="panel-body">
+            <div class="input-group">
+              <span class="input-group-addon" id="searchPrefix">Search</span>
+              <input type="text" class="form-control" ng-model="searchText" placeholder="Search.." aria-describedby="searchPrefix">
+            </div><br>
+            <button class="btn btn-success btn-block" ng-click="addGame()">Start new game!</button><br>
+            <div class="list-group" ng-repeat="game in games | orderBy: '-createdOn':true | filter:searchText as results" ng-show="game.state == 'open'">
+              <span class="list-group-item">
+                <h4 class="list-group-item-heading">{{game.gameTemplate._id}} #{{$index+1}}</h4>
+                <p class="list-group-item-text">
+                  <b>Min players:</b> {{game.minPlayers}}
+                  <br><b>Max players:</b> {{game.maxPlayers}}<br>
+                  <br><b>Players in game</b>
+                  <table class="table table-striped table-hover table-condensed">
+                    <tbody>
+                      <tr ng-repeat="player in game.players">
+                        <td>{{player.name}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <button class="btn btn-warning btn-block" ng-click="joinGame(game)">Join game!</button>
+                </p>
+              </span>
+            </div>
+            <button class="btn btn-success btn-block" ng-click="addGame()">Start new game!</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <b>Started Games</b>
+            </div>
+            <div class="panel-body">
+              <div class="input-group">
+                <span class="input-group-addon" id="searchPrefix">Search</span>
+                <input type="text" class="form-control" ng-model="searchTextStarted" placeholder="Search.." aria-describedby="searchPrefix">
+              </div><br>
+              <div class="list-group" ng-repeat="game in games | orderBy: '-createdOn':true | filter:searchTextStarted as resultsStarted" ng-show="game.state == 'started'">
+                <span class="list-group-item">
+                  <h4 class="list-group-item-heading">{{game.gameTemplate._id}} #{{$index+1}}</h4>
+                  <p class="list-group-item-text">
+                    <b>Min players:</b> {{game.minPlayers}}
+                    <br><b>Max players:</b> {{game.maxPlayers}}<br>
+                    <br><b>Players in game</b>
+                    <table class="table table-striped table-hover table-condensed">
+                      <tbody>
+                        <tr ng-repeat="player in game.players">
+                          <td>{{player.name}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <button class="btn btn-warning" ng-click="joinGame(game)">Join game!</button>
+                  </p>
+                </span>
+              </div>
+            </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <b>Finished Games</b>
+            </div>
+            <div class="panel-body">
+              <div class="input-group">
+                <span class="input-group-addon" id="searchPrefix">Search</span>
+                <input type="text" class="form-control" ng-model="searchTextFinished" placeholder="Search.." aria-describedby="searchPrefix">
+              </div><br>
+              <div class="list-group" ng-repeat="game in games | orderBy: '-createdOn':true | filter:searchTextFinished as resultsFinished" ng-show="game.state == 'finished'">
+                <span class="list-group-item">
+                  <h4 class="list-group-item-heading">{{game.gameTemplate._id}} #{{$index+1}}</h4>
+                  <p class="list-group-item-text">
+                    <b>Min players:</b> {{game.minPlayers}}
+                    <br><b>Max players:</b> {{game.maxPlayers}}<br>
+                    <br><b>Players in game</b>
+                    <table class="table table-striped table-hover table-condensed">
+                      <tbody>
+                        <tr ng-repeat="player in game.players">
+                          <td>{{player.name}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <a class="btn btn-info btn-block" a href="#/board/{{game._id}}">Show board!</a>
+                  </p>
+                </span>
+              </div>
             </div>
         </div>
       </div>
